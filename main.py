@@ -1,6 +1,8 @@
 import asyncio, os, sys, datetime
 from colorama import init
 from config import LOCAL_TZ, DELAY, GENSHIN_UID, ZZZ_UID, HSR_UID
+from version import VERSION
+from utils.updater import check_for_updates
 from client_factory import create_client
 from data_fetcher import collect_data, collect_one_time_data, update_characters
 from formatters.genshin_formatter import format_genshin
@@ -14,6 +16,7 @@ from utils.helpers import check_and_play_sound
 from utils.progress import sleep_with_progress, animate_fetching
 
 init()
+check_for_updates(VERSION)
 
 
 async def main_loop():

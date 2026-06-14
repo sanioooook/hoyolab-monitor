@@ -92,6 +92,53 @@ Your UID can be found in your HoYoLab profile or in-game.
 python main.py
 ```
 
+### First run - login
+
+On the first run the script needs to authenticate with HoYoLab. There are two ways to do this.
+
+---
+
+#### Option 1: Email / password (automatic)
+
+1. Fill in `HOYOLAB_LOGIN` and `HOYOLAB_PASSWORD` in `.env`
+2. Run `python main.py`
+3. A browser page may open with a CAPTCHA - solve it if it appears
+4. A local page with an input field and a **Send** button will open
+5. HoYoLab sends a one-time verification code to your email
+6. Enter the code and click **Send**
+7. Login is complete - credentials are saved to `cookies.txt` and reused on future runs
+
+---
+
+#### Option 2: Manual cookies from browser DevTools
+
+If you want to skip the email flow, you can copy cookies directly from your browser.
+
+1. Go to [hoyolab.com](https://www.hoyolab.com) and make sure you are logged in
+2. Open DevTools (`F12`) and go to **Application > Cookies > https://www.hoyolab.com**
+3. Create a file named `cookies.txt` in the project folder
+
+You can use either format:
+
+**JSON format:**
+```json
+{
+  "ltoken_v2": "...",
+  "ltuid_v2": "...",
+  "ltmid_v2": "...",
+  "account_id_v2": "...",
+  "account_mid_v2": "...",
+  "cookie_token_v2": "..."
+}
+```
+
+**Cookie string format:**
+```
+ltoken_v2=...; ltuid_v2=...; ltmid_v2=...; account_id_v2=...; account_mid_v2=...; cookie_token_v2=...
+```
+
+Copy the values for these six keys from DevTools and paste them in. `HOYOLAB_LOGIN` and `HOYOLAB_PASSWORD` are not needed when using this method.
+
 ---
 
 ## Updating

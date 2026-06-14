@@ -1,7 +1,8 @@
 import sys
 import genshin
+from genshin.client.manager.cookie import fetch_cookie_with_stoken_v2
 from config import LANG, GENSHIN_UID, ZZZ_UID, HSR_UID, HOYOLAB_LOGIN, HOYOLAB_PASSWORD
-from utils.cookies_manager import load_cookies, save_cookies_from_login_result
+from utils.cookies_manager import load_cookies, save_cookies
 
 
 async def create_client() -> genshin.Client:
@@ -15,8 +16,14 @@ async def create_client() -> genshin.Client:
             print("[Error] HOYOLAB_LOGIN and HOYOLAB_PASSWORD are not set in .env")
             sys.exit(1)
         print("[Client] No cookies found, logging in...")
-        result = await client.login_with_app_password(HOYOLAB_LOGIN, HOYOLAB_PASSWORD)
-        save_cookies_from_login_result(result)
+        await client.login_with_app_password(HOYOLAB_LOGIN, HOYOLAB_PASSWORD)
+        print("[Client] Fetching ltoken_v2 and cookie_token_v2...")
+        extra = await fetch_cookie_with_stoken_v2(
+            client.cookie_manager.cookies,
+            token_types=[2, 4],
+        )
+        client.set_cookies({**dict(client.cookie_manager.cookies), **extra})
+        save_cookies(client)
 
     if GENSHIN_UID:
         client.uids[genshin.Game.GENSHIN] = GENSHIN_UID

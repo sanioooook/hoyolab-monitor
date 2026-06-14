@@ -27,7 +27,8 @@ async def main_loop():
      hsr_anomaly_arb, hsr_apc_shadow, hsr_pure_fic, hsr_chall) = await collect_one_time_data(client)
 
     skip_event = asyncio.Event()
-    asyncio.create_task(keyboard_listener(skip_event))
+    last_fetch_time = [datetime.datetime.now(LOCAL_TZ)]
+    asyncio.create_task(keyboard_listener(skip_event, last_fetch_time))
 
     try:
         while True:
@@ -36,6 +37,7 @@ async def main_loop():
             # Показываем анимацию пока идёт запрос данных
             spinner = asyncio.create_task(animate_fetching())
             genshin_note, zzz_note, zzz_stats, shiyu_defense, deadly_assault, hsr_note = await collect_data(client)
+            last_fetch_time[0] = now = datetime.datetime.now(LOCAL_TZ)
             spinner.cancel()
             await asyncio.gather(spinner, return_exceptions=True)
             sys.stdout.write("\r" + " " * 50 + "\r")

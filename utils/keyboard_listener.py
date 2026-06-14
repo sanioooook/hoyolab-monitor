@@ -1,11 +1,16 @@
 import asyncio
-import time
+import datetime
+from config import LOCAL_TZ
 
 
-async def keyboard_listener(skip_event: asyncio.Event, cooldown: int = 60) -> None:
+async def keyboard_listener(
+    skip_event: asyncio.Event,
+    last_fetch_time: list[datetime.datetime],
+    cooldown: int = 60,
+) -> None:
     """
     Listens for R/r key press and sets skip_event to trigger an early refresh.
-    Enforces a cooldown between manual triggers to avoid API rate limits.
+    Cooldown is measured from the last completed fetch, not the last key press.
     Windows-only (msvcrt). No-op on other platforms.
     """
     try:
@@ -13,14 +18,11 @@ async def keyboard_listener(skip_event: asyncio.Event, cooldown: int = 60) -> No
     except ImportError:
         return
 
-    last_triggered = 0.0
-
     while True:
         if msvcrt.kbhit():
             key = msvcrt.getch()
             if key in (b'r', b'R'):
-                now = time.monotonic()
-                if now - last_triggered >= cooldown:
+                elapsed = (datetime.datetime.now(LOCAL_TZ) - last_fetch_time[0]).total_seconds()
+                if elapsed >= cooldown:
                     skip_event.set()
-                    last_triggered = now
         await asyncio.sleep(0.1)

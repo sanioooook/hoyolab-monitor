@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - version.py
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version from version.py
+        id: ver
+        run: |
+          VERSION=$(python -c "
+          import re
+          content = open('version.py').read()
+          print(re.search(r'VERSION\s*=\s*[\"\'](.*?)[\"\'']', content).group(1))
+          ")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if tag already exists
+        id: check
+        run: |
+          if git ls-remote --tags origin "refs/tags/${{ steps.ver.outputs.tag }}" | grep -q .; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ steps.ver.outputs.tag }} \
+            --title "${{ steps.ver.outputs.tag }}" \
+            --generate-notes

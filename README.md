@@ -1,6 +1,6 @@
 # hoyolab-monitor
 
-A terminal-based real-time resource monitor for HoYoLab accounts. Tracks **Genshin Impact**, **Zenless Zone Zero**, and **Honkai: Star Rail** — resin, battery charge, expeditions, weekly challenges, and more. Refreshes on a configurable schedule with a live countdown progress bar.
+A terminal-based real-time resource monitor for HoYoLab accounts. Tracks **Genshin Impact**, **Zenless Zone Zero**, and **Honkai: Star Rail** - resin, battery charge, expeditions, weekly challenges, and more. Refreshes on a configurable schedule with a live countdown progress bar.
 
 ## Features
 
@@ -71,7 +71,7 @@ Copy `.env.example` to `.env` and edit it:
 HOYOLAB_LOGIN=your@email.com
 HOYOLAB_PASSWORD=yourpassword
 
-# Game UIDs — leave blank or remove the line to disable that game
+# Game UIDs - leave blank or remove the line to disable that game
 GENSHIN_UID=
 ZZZ_UID=
 HSR_UID=
@@ -103,7 +103,7 @@ pip install -r requirements.txt
 ```
 
 ### If you downloaded a zip
-Download the latest archive from [Releases](https://github.com/sanioooook/hoyolab-monitor/releases) and extract it over your existing folder. Your `.env` file will not be overwritten — it is excluded by `.gitignore`.
+Download the latest archive from [Releases](https://github.com/sanioooook/hoyolab-monitor/releases) and extract it over your existing folder. Your `.env` file will not be overwritten - it is excluded by `.gitignore`.
 
 On every startup the monitor silently checks GitHub for a newer release and prints a notification if one is available.
 
@@ -111,4 +111,4 @@ On every startup the monitor silently checks GitHub for a newer release and prin
 
 ## Credits
 
-This project is built on top of [**genshin.py**](https://github.com/seriaati/genshin.py), maintained by [**seriaati**](https://github.com/seriaati). The entire data layer of this monitor would not exist without that library — huge thanks for keeping an unofficial HoYoLab API wrapper alive and well.
+This project is built on top of [**genshin.py**](https://github.com/seriaati/genshin.py), maintained by [**seriaati**](https://github.com/seriaati). The entire data layer of this monitor would not exist without that library - huge thanks for keeping an unofficial HoYoLab API wrapper alive and well.

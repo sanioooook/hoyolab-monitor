@@ -18,11 +18,7 @@ jobs:
       - name: Read version from version.py
         id: ver
         run: |
-          VERSION=$(python -c "
-          import re
-          content = open('version.py').read()
-          print(re.search(r'VERSION\s*=\s*[\"\'](.*?)[\"\'']', content).group(1))
-          ")
+          VERSION=$(python -c "exec(open('version.py').read()); print(VERSION)")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=v$VERSION" >> $GITHUB_OUTPUT
 

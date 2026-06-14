@@ -1,10 +1,14 @@
 import os
+import pathlib
 import datetime
 import tzlocal
 
-def load_env(filepath=".env"):
-    if not os.path.exists(filepath):
-        print(f"File {filepath} not found")
+_ROOT = pathlib.Path(__file__).parent
+
+def load_env():
+    filepath = _ROOT / ".env"
+    if not filepath.exists():
+        print(f"[Config] .env not found at {filepath} — copy .env.example and fill in your credentials")
         return
     with open(filepath, "r", encoding="utf-8") as f:
         for line in f:
@@ -36,4 +40,4 @@ HSR_UID     = _optional_int("HSR_UID")
 DELAY = int(os.getenv("DELAY_MINUTES", "15")) * 60
 HOYOLAB_LOGIN = os.getenv("HOYOLAB_LOGIN")
 HOYOLAB_PASSWORD = os.getenv("HOYOLAB_PASSWORD")
-COOKIE_FILE = "cookies.txt"
+COOKIE_FILE = str(_ROOT / "cookies.txt")

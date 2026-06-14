@@ -39,7 +39,7 @@ async def sleep_with_progress(
         filled = round(BAR_WIDTH * elapsed / total_seconds)
         bar = "█" * filled + "░" * (BAR_WIDTH - filled)
         mins, secs = divmod(remaining, 60)
-        line = f"\rСледующее обновление: [{bar}] {mins:02}:{secs:02}"
+        line = f"\rСледующее обновление: [{bar}] {mins:02}:{secs:02}  [R] refresh"
         sys.stdout.write(line)
         sys.stdout.flush()
         await asyncio.sleep(1)

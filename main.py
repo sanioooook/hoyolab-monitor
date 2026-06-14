@@ -14,6 +14,7 @@ from formatters.hsr_formatter import (
 )
 from utils.helpers import check_and_play_sound
 from utils.progress import sleep_with_progress, animate_fetching
+from utils.keyboard_listener import keyboard_listener
 
 init()
 check_for_updates(VERSION)
@@ -25,8 +26,13 @@ async def main_loop():
     (genshin_spiral_abyss, genshin_theater, genshin_stygian_onslaught,
      hsr_anomaly_arb, hsr_apc_shadow, hsr_pure_fic, hsr_chall) = await collect_one_time_data(client)
 
+    skip_event = asyncio.Event()
+    asyncio.create_task(keyboard_listener(skip_event))
+
     try:
         while True:
+            skip_event.clear()
+
             # Показываем анимацию пока идёт запрос данных
             spinner = asyncio.create_task(animate_fetching())
             genshin_note, zzz_note, zzz_stats, shiyu_defense, deadly_assault, hsr_note = await collect_data(client)
@@ -59,7 +65,7 @@ Event occurred on: {now.strftime('%d.%m.%Y %H:%M:%S')}""")
             if genshin_note and zzz_note:
                 check_and_play_sound(genshin_note, zzz_note, now)
 
-            await sleep_with_progress(DELAY)
+            await sleep_with_progress(DELAY, skip_event)
     except KeyboardInterrupt:
         print("\n[Exit] Graceful shutdown.")
 

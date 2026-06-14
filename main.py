@@ -38,8 +38,7 @@ async def main_loop():
             now = datetime.datetime.now(LOCAL_TZ)
             os.system("cls" if os.name == "nt" else "clear")
 
-            genshin_section = f"""Genshin:
-{format_genshin(genshin_note, genshin_spiral_abyss, genshin_theater, genshin_stygian_onslaught, now)}""" if GENSHIN_UID else ""
+            genshin_section = format_genshin(genshin_note, genshin_spiral_abyss, genshin_theater, genshin_stygian_onslaught, now) if GENSHIN_UID else ""
 
             zzz_section = f"""ZZZ:
 {format_ZZZ_notes(zzz_note, now)}

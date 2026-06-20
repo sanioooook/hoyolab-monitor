@@ -11,7 +11,7 @@ from config import LANG, GENSHIN_UID, ZZZ_UID, HSR_UID
 
 async def update_characters():
     try:
-        await genshin.utility.update_characters_enka(['en-us', LANG])
+        await genshin.utility.update_characters_any(['en-us', LANG])
     except Exception as e:
         print(e)
 

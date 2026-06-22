@@ -64,8 +64,8 @@ async def main_loop():
             print(f"""{sections}
 Event occurred on: {now.strftime('%d.%m.%Y %H:%M:%S')}""")
 
-            if genshin_note and zzz_note:
-                check_and_play_sound(genshin_note, zzz_note, now)
+            if any([genshin_note, zzz_note, hsr_note]):
+                check_and_play_sound(now, genshin_note, zzz_note, hsr_note)
 
             await sleep_with_progress(DELAY, skip_event)
     except KeyboardInterrupt:

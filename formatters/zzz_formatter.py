@@ -239,10 +239,8 @@ def format_ZZZ_temple(zzz_note: ZZZNotes, now: datetime.datetime) -> str:
 
         currency_text = f"{color_by_condition(current_currency, weekly_currency_max)}/{weekly_currency_max}"
         currency_reset_datetime = format_datetime(currency_reset_datetime, now, deadline_days=2, deadline_hours=0)
-        # currency_remained_time = format_timedelta(zzz_note_temple_running.currency_next_refresh_ts)
-
         level_text = f"{color_by_condition(level, max_level)}/{max_level}"
-        return_str = f"Тунбао: {currency_text} | Сброс {currency_reset_datetime}" # | Осталось времени {currency_remained_time}
+        return_str = f"Тунбао: {currency_text} | Сброс {currency_reset_datetime}"
 
         auto_work = zzz_note_temple_running.auto_work
         if auto_work is not None:

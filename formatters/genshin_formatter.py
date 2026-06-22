@@ -76,7 +76,6 @@ def format_genshin_notes(genshin_note: Notes, now: datetime.datetime) -> str:
     resin_discounts_text = f"{color_by_condition(resin_discounts, genshin_note.max_resin_discounts)}/{genshin_note.max_resin_discounts}"
     transformer_text = format_datetime(genshin_note.transformer_recovery_time, now, text_if_dt_is_none="Откат завершен")
 
-    # | Осталось времени {transformer_recovery_remained_time}
     return_str = f"""Первородная смола: {resin_text} | Заполнится {resin_recovery_time} | Осталось времени {resin_remained_time}
 Сокровища обители: {realm_currency_text} | Заполнится {realm_currency_recovery_time} | Осталось времени {realm_currency_remained_time}
 Поручения: {commissions_text}{commissions_reward}

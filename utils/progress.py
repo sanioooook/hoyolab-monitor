@@ -44,6 +44,5 @@ async def sleep_with_progress(
         sys.stdout.flush()
         await asyncio.sleep(1)
 
-    # Очистить строку перед следующей итерацией
     sys.stdout.write("\r" + " " * 60 + "\r")
     sys.stdout.flush()

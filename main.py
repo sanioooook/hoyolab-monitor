@@ -33,8 +33,6 @@ async def main_loop():
     try:
         while True:
             skip_event.clear()
-
-            # Показываем анимацию пока идёт запрос данных
             spinner = asyncio.create_task(animate_fetching())
             genshin_note, zzz_note, zzz_stats, shiyu_defense, deadly_assault, hsr_note = await collect_data(client)
             last_fetch_time[0] = now = datetime.datetime.now(LOCAL_TZ)

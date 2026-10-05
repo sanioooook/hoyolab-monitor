@@ -46,9 +46,9 @@ def color_by_condition_for_resin(current: int, max_value: int) -> str:
     else:
         return yellow(str(current))
 
-def format_timedelta(td: datetime.timedelta):
+def format_timedelta(td: datetime.timedelta) -> str:
     if td.total_seconds() < 0:
-        td = datetime.timedelta(0)
+        return red("Завершено")
 
     days = td.days
     hours, remainder = divmod(td.seconds, 3600)

@@ -238,19 +238,25 @@ def format_ZZZ_temple(zzz_note: ZZZNotes, now: datetime.datetime) -> str:
         max_level = 45
 
         currency_text = f"{color_by_condition(current_currency, weekly_currency_max)}/{weekly_currency_max}"
-        currency_reset_datetime = format_datetime(currency_reset_datetime, now, deadline_days=2, deadline_hours=0)
+        just_reset = zzz_note_temple_running.currency_next_refresh_ts.total_seconds() == 0
+        currency_reset_text = (
+            yellow("недавно сброшено")
+            if just_reset
+            else format_datetime(currency_reset_datetime, now, deadline_days=2, deadline_hours=0)
+        )
         level_text = f"{color_by_condition(level, max_level)}/{max_level}"
-        return_str = f"Тунбао: {currency_text} | Сброс {currency_reset_datetime}"
+        return_str = f"Тунбао: {currency_text} | Сброс {currency_reset_text}"
 
         auto_work = zzz_note_temple_running.auto_work
         if auto_work is not None:
-            if auto_work.is_auto_work_running and auto_work.auto_work_ended is False:
+            running = auto_work.is_auto_work_running and auto_work.auto_work_ended is False
+            if running:
                 auto_work_status = green("В процессе")
+                auto_work_end_time = format_timedelta(auto_work.left_ts)
+                auto_work_end_datetime = format_datetime(now + auto_work.left_ts, now, deadline_days=0, deadline_hours=3)
+                return_str += f"\n    Уровень: {level_text} | Авторежим: {auto_work_status} | Остановится {auto_work_end_datetime} | Осталось времени: {auto_work_end_time}"
             else:
-                auto_work_status = red("Доступна выручка")
-            auto_work_end_time = format_timedelta(auto_work.left_ts)
-            auto_work_end_datetime = format_datetime(now + auto_work.left_ts, now, deadline_days=0, deadline_hours=3)
-            return_str += f"\n    Уровень: {level_text} | Авторежим: {auto_work_status} | Остановится {auto_work_end_datetime} | Осталось времени: {auto_work_end_time}"
+                return_str += f"\n    Уровень: {level_text} | Авторежим: {red('Доступна выручка')}"
         else:
             expedition_state_mapping = {
                 "ExpeditionStateInCanSend": yellow("Можно отправить"),

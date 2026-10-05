@@ -1,5 +1,7 @@
 import asyncio, os, sys, datetime
 from colorama import init
+from utils.patches import patch_zzz_enums
+patch_zzz_enums()
 from config import LOCAL_TZ, DELAY, GENSHIN_UID, ZZZ_UID, HSR_UID
 from version import VERSION
 from utils.updater import check_for_updates

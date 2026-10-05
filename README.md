@@ -12,7 +12,7 @@ A terminal-based real-time resource monitor for HoYoLab accounts. Tracks **Gensh
 **Zenless Zone Zero**
 - Battery charge, engagement, video store state
 - Ridu Weekly, hollow zero, scratch card
-- Shiyu Defense, Deadly Assault
+- Shiyu Defense; Deadly Assault with Adversity (hard) mode and per-boss table
 - Suibian Temple / Tongbao / auto-work (optional, hidden by default - set `ZZZ_SHOW_TEMPLE=true`)
 
 **Honkai: Star Rail**

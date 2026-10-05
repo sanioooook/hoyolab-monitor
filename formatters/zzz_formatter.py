@@ -45,29 +45,86 @@ def _is_layer_passed(layer: Optional[ShiyuV2FifthFloorLayer]) -> bool:
     return score > 0 or clear_time > 0
 
 
-def format_deadly_assault(deadly_assault: DeadlyAssault, now: datetime.datetime) -> str:
-    if deadly_assault is not None:
-        end_time = (deadly_assault.end_time.replace(tzinfo=HOYO_TZ).astimezone(LOCAL_TZ)
-                    if deadly_assault.end_time is not None
-                    else None)
-        deadly_assault_remained_time = (format_timedelta(end_time - now)
-                                        if end_time is not None
-                                        else red("Данных нет"))
-        deadly_assault_end_time = (format_datetime(end_time, now, to_local_timezone=False)
-                                   if end_time is not None
-                                   else red("Данных нет"))
-        deadly_assault_str = f"Опасный штурм | Закончится {deadly_assault_end_time} | Осталось времени {deadly_assault_remained_time}"
-        if deadly_assault.has_data:
-            max_stars = len(deadly_assault.challenges) * 3
-            total_star = deadly_assault.total_star
-            deadly_assault_str = deadly_assault_str + f"""
-    Полученные звезды: {color_by_condition(total_star, max_stars)}/{max_stars}
-    Количество очков: {deadly_assault.total_score} | Ранг {deadly_assault.rank_percent}"""
-        else:
-            deadly_assault_str = deadly_assault_str + "\n    " + red("Данных нет")
-        return deadly_assault_str
-    return red("Опасный штурм | Данных нет")
+DEADLY_ASSAULT_BOSSES = 3
+DEADLY_ASSAULT_BOSS_STARS = 3
+BOSS_NAME_MAX_LEN = 15
 
+
+def _table(rows: list[list[str]]) -> list[str]:
+    # Align cells column-wise by visible width (ANSI codes ignored)
+    widths = [max(_visible_len(row[i]) for row in rows) for i in range(len(rows[0]))]
+    return [" | ".join(_pad_right(cell, widths[i]) for i, cell in enumerate(row)).rstrip() for row in rows]
+
+
+def _color_by_stars(text: str, stars: int, max_stars: int) -> str:
+    if stars >= max_stars:
+        return green(text)
+    if stars > 0:
+        return yellow(text)
+    return red(text)
+
+
+def _short_name(name: str) -> str:
+    return name if len(name) <= BOSS_NAME_MAX_LEN else name[:BOSS_NAME_MAX_LEN - 1] + "…"
+
+
+def _deadly_assault_mode_cells(stars: int, max_stars: int, score: int, rank: Optional[str]) -> list[str]:
+    return [
+        f"Полученные звезды: {_color_by_stars(str(stars), stars, max_stars)}/{max_stars}",
+        f"Количество очков: {_color_by_stars(str(score), stars, max_stars)}",
+        f"Ранг {rank or red('Данных нет')}",
+    ]
+
+
+def _deadly_assault_boss_column(challenge, fallback_name: str, suffix: str = "") -> list[str]:
+    if challenge is None:
+        return [fallback_name, f"Звёзды {red('Данных нет')}", f"Очки {red('Данных нет')}"]
+    stars, max_stars = challenge.star, challenge.total_star
+    return [
+        _short_name(challenge.boss.name) + suffix,
+        f"Звёзды {_color_by_stars(f'{stars}/{max_stars}', stars, max_stars)}",
+        f"Очки {_color_by_stars(str(challenge.score), stars, max_stars)}",
+    ]
+
+
+def format_deadly_assault(deadly_assault: DeadlyAssault, now: datetime.datetime) -> str:
+    if deadly_assault is None:
+        return red("Опасный штурм | Данных нет")
+
+    end_time = (deadly_assault.end_time.replace(tzinfo=HOYO_TZ).astimezone(LOCAL_TZ)
+                if deadly_assault.end_time is not None
+                else None)
+    remained_time = format_timedelta(end_time - now) if end_time is not None else red("Данных нет")
+    end_time_str = (format_datetime(end_time, now, to_local_timezone=False)
+                    if end_time is not None
+                    else red("Данных нет"))
+    lines = [f"Опасный штурм | Закончится {end_time_str} | Осталось времени {remained_time}"]
+    indent = "    "
+
+    if not deadly_assault.has_data:
+        lines.append(f"{indent}Обычный режим: {red('Данных нет')}")
+        return "\n".join(lines)
+
+    max_stars = DEADLY_ASSAULT_BOSSES * DEADLY_ASSAULT_BOSS_STARS
+    mode_rows = [_deadly_assault_mode_cells(
+        deadly_assault.total_star, max_stars, deadly_assault.total_score, deadly_assault.rank_percent)]
+    hard = deadly_assault.hard_challenges[0] if deadly_assault.has_hard and deadly_assault.hard_challenges else None
+    if hard is not None:
+        mode_rows.append(_deadly_assault_mode_cells(
+            hard.star, hard.total_star, hard.score, deadly_assault.hard_rank_percent))
+
+    for label, row in zip(["Обычный режим:", "Сложный режим:"], _table(mode_rows)):
+        lines.append(f"{indent}{label} {row}")
+    if hard is None:
+        lines.append(f"{indent}Сложный режим: {red('Данных нет')}")
+
+    challenges = list(deadly_assault.challenges)
+    columns = [_deadly_assault_boss_column(challenges[i] if i < len(challenges) else None, f"Босс {i + 1}")
+               for i in range(DEADLY_ASSAULT_BOSSES)]
+    columns.append(_deadly_assault_boss_column(hard, "Сложный режим", " (сложный)"))
+    lines += _table([list(row) for row in zip(*columns)])
+
+    return "\n".join(lines)
 
 def format_ZZZ_stats(zzz_stats: ZZZUserStats, now: datetime.datetime) -> str:
     if zzz_stats is not None:

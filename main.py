@@ -2,7 +2,7 @@ import asyncio, os, sys, datetime
 from colorama import init
 from utils.patches import patch_zzz_enums
 patch_zzz_enums()
-from config import LOCAL_TZ, DELAY, GENSHIN_UID, ZZZ_UID, HSR_UID
+from config import LOCAL_TZ, DELAY, GENSHIN_UID, ZZZ_UID, HSR_UID, ZZZ_SHOW_TEMPLE
 from version import VERSION
 from utils.updater import check_for_updates
 from client_factory import create_client
@@ -48,11 +48,11 @@ async def main_loop():
 
             genshin_section = format_genshin(genshin_note, genshin_spiral_abyss, genshin_theater, genshin_stygian_onslaught, now) if GENSHIN_UID else ""
 
+            zzz_temple = f"\n{format_ZZZ_temple(zzz_note, now)}" if ZZZ_SHOW_TEMPLE else ""
             zzz_section = f"""ZZZ:
 {format_ZZZ_notes(zzz_note, now)}
 {format_shiyu_defense(shiyu_defense, now)}
-{format_deadly_assault(deadly_assault, now)}{format_ZZZ_stats(zzz_stats, now)}
-{format_ZZZ_temple(zzz_note, now)}""" if ZZZ_UID else ""
+{format_deadly_assault(deadly_assault, now)}{format_ZZZ_stats(zzz_stats, now)}{zzz_temple}""" if ZZZ_UID else ""
 
             hsr_section = f"""HSR:
 {format_hsr_notes(hsr_note, now)}{format_hsr_anomaly_arbitration(hsr_anomaly_arb, now)}

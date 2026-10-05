@@ -12,7 +12,8 @@ A terminal-based real-time resource monitor for HoYoLab accounts. Tracks **Gensh
 **Zenless Zone Zero**
 - Battery charge, engagement, video store state
 - Ridu Weekly, hollow zero, scratch card
-- Shiyu Defense, Deadly Assault, Suibian Temple / auto-work
+- Shiyu Defense, Deadly Assault
+- Suibian Temple / Tongbao / auto-work (optional, hidden by default - set `ZZZ_SHOW_TEMPLE=true`)
 
 **Honkai: Star Rail**
 - TB Power (current and reserved), daily training
@@ -80,7 +81,12 @@ HSR_UID=
 LANG=en-us
 DELAY_MINUTES=15
 TWOCAPTCHA_API_KEY=
+
+# Show Suibian Temple block (Tongbao, level, auto-work)
+ZZZ_SHOW_TEMPLE=false
 ```
+
+`ZZZ_SHOW_TEMPLE` only controls the display: temple data arrives in the same ZZZ real-time notes request as battery, engagement, etc., so no extra request is made either way.
 
 Your UID can be found in your HoYoLab profile or in-game.
 

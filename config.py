@@ -34,9 +34,16 @@ def _optional_int(key: str):
     v = os.getenv(key)
     return int(v) if v else None
 
+def _bool(key: str, default: bool = False) -> bool:
+    v = os.getenv(key)
+    if not v:
+        return default
+    return v.strip().lower() in ("1", "true", "yes", "on")
+
 GENSHIN_UID = _optional_int("GENSHIN_UID")
 ZZZ_UID     = _optional_int("ZZZ_UID")
 HSR_UID     = _optional_int("HSR_UID")
+ZZZ_SHOW_TEMPLE = _bool("ZZZ_SHOW_TEMPLE")
 DELAY = int(os.getenv("DELAY_MINUTES", "15")) * 60
 HOYOLAB_LOGIN = os.getenv("HOYOLAB_LOGIN")
 HOYOLAB_PASSWORD = os.getenv("HOYOLAB_PASSWORD")

@@ -1,2 +1,2 @@
-VERSION = "1.0.5"
+VERSION = "1.0.6"
 GITHUB_REPO = "sanioooook/hoyolab-monitor"  # owner/repo — update if forked

@@ -3,7 +3,14 @@ import datetime
 from genshin.models import StarRailNote, AnomalyArbitration, StarRailAPCShadow, StarRailPureFiction, StarRailChallenge
 
 from .shared_format import *
-from config import LOCAL_TZ
+from config import LOCAL_TZ, HOYO_TZ
+
+
+def _hsr_end(end_time) -> datetime.datetime:
+    dt = end_time.datetime
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=HOYO_TZ)
+    return dt.astimezone(LOCAL_TZ)
 
 
 def format_hsr_notes(hsr_note: StarRailNote, now: datetime.datetime) -> str:
@@ -56,7 +63,7 @@ def format_hsr_anomaly_arbitration(data: AnomalyArbitration, now: datetime.datet
     mini_boss_text = f"{color_by_condition(data.summary.mini_boss_stars, mini_boss_max)}/{mini_boss_max}"
     boss_text = f"{color_by_condition(data.summary.boss_stars, boss_max)}/{boss_max}"
 
-    end_dt = data.records[0].season.end_time.datetime.replace(tzinfo=LOCAL_TZ)
+    end_dt = _hsr_end(data.records[0].season.end_time)
     end_text = format_datetime(end_dt, now, to_local_timezone=False)
     remains = format_timedelta(end_dt - now)
     name = data.records[0].season.name
@@ -71,7 +78,7 @@ def format_hsr_apocalyptic_shadow(data: StarRailAPCShadow, now: datetime.datetim
     stars_max = 12
     stars_text = f"{color_by_condition(data.total_stars, stars_max)}/{stars_max}"
 
-    end_dt = data.seasons[0].end_time.datetime.replace(tzinfo=LOCAL_TZ)
+    end_dt = _hsr_end(data.seasons[0].end_time)
     end_text = format_datetime(end_dt, now, to_local_timezone=False)
     remains = format_timedelta(end_dt - now)
 
@@ -85,7 +92,7 @@ def format_hsr_pure_fiction(data: StarRailPureFiction, now: datetime.datetime) -
     stars_max = 12
     stars_text = f"{color_by_condition(data.total_stars, stars_max)}/{stars_max}"
 
-    end_dt = data.seasons[0].end_time.datetime.replace(tzinfo=LOCAL_TZ)
+    end_dt = _hsr_end(data.seasons[0].end_time)
     end_text = format_datetime(end_dt, now, to_local_timezone=False)
     remains = format_timedelta(end_dt - now)
 
@@ -99,7 +106,7 @@ def format_hsr_challenge(data: StarRailChallenge, now: datetime.datetime) -> str
     stars_max = 36
     stars_text = f"{color_by_condition(data.total_stars, stars_max)}/{stars_max}"
 
-    end_dt = data.seasons[0].end_time.datetime.replace(tzinfo=LOCAL_TZ)
+    end_dt = _hsr_end(data.seasons[0].end_time)
     end_text = format_datetime(end_dt, now, to_local_timezone=False)
     remains = format_timedelta(end_dt - now)
 

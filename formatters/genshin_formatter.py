@@ -91,7 +91,7 @@ def format_genshin_notes(genshin_note: Notes, now: datetime.datetime) -> str:
 def format_genshin_abyss(genshin_spiral_abyss: SpiralAbyss, now: datetime.datetime) -> str:
     if genshin_spiral_abyss is None:
         return red("Витая бездна | Данных нет")
-    spiral_abyss_end_time = genshin_spiral_abyss.end_time.replace(tzinfo=LOCAL_TZ)
+    spiral_abyss_end_time = genshin_spiral_abyss.end_time.replace(tzinfo=HOYO_TZ).astimezone(LOCAL_TZ)
     spiral_abyss_end_time_text = format_datetime(spiral_abyss_end_time, now, text_if_dt_is_none="Завершено")
     remained_abyss_end_time = spiral_abyss_end_time - now
     max_floor = (
@@ -113,9 +113,8 @@ def format_genshin_theater(genshin_imaginarium_theater: ImgTheater, now: datetim
 
     current_imaginarium_theater = genshin_imaginarium_theater.datas[0]
     # timestapm = current_imaginarium_theater.schedule.end_time
-    current_imaginarium_theater_end_time = (
-        datetime.datetime.fromtimestamp(current_imaginarium_theater.schedule.end_time)
-        .replace(tzinfo=HOYO_TZ).astimezone(LOCAL_TZ))
+    current_imaginarium_theater_end_time = datetime.datetime.fromtimestamp(
+        current_imaginarium_theater.schedule.end_time, tz=LOCAL_TZ)
     imaginarium_theater_end_time_text = format_datetime(current_imaginarium_theater_end_time, now,
                                                         text_if_dt_is_none="Завершено")
     remained_imaginarium_theater_end_time = current_imaginarium_theater_end_time - now

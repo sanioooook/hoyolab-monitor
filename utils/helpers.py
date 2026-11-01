@@ -1,7 +1,6 @@
 import datetime
 import typing
 from genshin.models import Notes, ZZZNotes, StarRailNote
-from config import LOCAL_TZ
 from utils.sound import play_sound
 
 
@@ -11,13 +10,12 @@ def check_and_play_sound(
     zzz_note: typing.Optional[ZZZNotes] = None,
     hsr_note: typing.Optional[StarRailNote] = None,
 ) -> None:
-    now_plus_one_day = now + datetime.timedelta(days=1)
-    reset_time = datetime.datetime(
-        day=now_plus_one_day.day, month=now_plus_one_day.month, year=now_plus_one_day.year,
-        hour=12, minute=0, second=0, microsecond=0,
-        tzinfo=datetime.timezone(datetime.timedelta(hours=9)),
-    ).astimezone(LOCAL_TZ)
-    near_reset = reset_time - now <= datetime.timedelta(hours=5)
+    # Daily reset on Europe servers: 04:00 UTC+1 = 03:00 UTC. Take the nearest upcoming one.
+    now_utc = now.astimezone(datetime.timezone.utc)
+    reset_time = now_utc.replace(hour=3, minute=0, second=0, microsecond=0)
+    if reset_time <= now_utc:
+        reset_time += datetime.timedelta(days=1)
+    near_reset = reset_time - now_utc <= datetime.timedelta(hours=3)
 
     sound_conditions = []
 

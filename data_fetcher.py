@@ -18,119 +18,67 @@ async def update_characters():
 
 @handle_geetest
 async def zzz_notes(client: genshin.Client) -> ZZZNotes | None:
-    try:
-        return await client.get_zzz_notes()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_zzz_notes()
 
 
 @handle_geetest
 async def zzz_user(client: genshin.Client) -> ZZZUserStats | None:
-    try:
-        return await client.get_zzz_user()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_zzz_user()
 
 
 @handle_geetest
 async def get_shiyu_defense(client: genshin.Client) -> ShiyuDefense | None:
-    try:
-        return await client.get_shiyu_defense()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_shiyu_defense()
 
 
 @handle_geetest
 async def get_deadly_assault(client: genshin.Client) -> DeadlyAssault | None:
-    try:
-        return await client.get_deadly_assault()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_deadly_assault()
 
 
 @handle_geetest
 async def genshin_notes(client: genshin.Client) -> Notes | None:
-    try:
-        return await client.get_genshin_notes()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_genshin_notes()
 
 
 @handle_geetest
 async def genshin_abyss(client: genshin.Client) -> SpiralAbyss | None:
-    try:
-        return await client.get_genshin_spiral_abyss(lang=LANG)
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_genshin_spiral_abyss(lang=LANG)
 
 
 @handle_geetest
 async def stygian_onslaught(client: genshin.Client) -> list[HardChallenge] | None:
-    try:
-        return await client.get_stygian_onslaught()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_stygian_onslaught()
 
 
 @handle_geetest
 async def genshin_imaginarium_theater(client: genshin.Client) -> ImgTheater | None:
-    try:
-        return await client.get_imaginarium_theater()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_imaginarium_theater()
 
 
 @handle_geetest
 async def hsr_notes(client: genshin.Client) -> StarRailNote | None:
-    try:
-        return await client.get_starrail_notes()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_starrail_notes()
 
 
 @handle_geetest
 async def hsr_anomaly_arbitration(client: genshin.Client) -> AnomalyArbitration | None:
-    try:
-        return await client.get_anomaly_arbitration()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_anomaly_arbitration()
 
 
 @handle_geetest
 async def hsr_apocalyptic_shadow(client: genshin.Client) -> StarRailAPCShadow | None:
-    try:
-        return await client.get_apocalyptic_shadow()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_apocalyptic_shadow()
 
 
 @handle_geetest
 async def hsr_pure_fiction(client: genshin.Client) -> StarRailPureFiction | None:
-    try:
-        return await client.get_starrail_pure_fiction()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_starrail_pure_fiction()
 
 
 @handle_geetest
 async def hsr_challenge(client: genshin.Client) -> StarRailChallenge | None:
-    try:
-        return await client.get_starrail_challenge()
-    except Exception as e:
-        print(e)
-    return None
+    return await client.get_starrail_challenge()
 
 
 async def _skip():

@@ -15,6 +15,9 @@ def handle_geetest(func):
 
         except genshin.GeetestError as e:
             print(f"[Geetest] Captcha triggered in {func.__name__}: {e}")
+            if not TWOCAPTCHA_API_KEY:
+                print("[Geetest] TWOCAPTCHA_API_KEY is not set in .env, skipping.")
+                return None
             solver = TwoCaptcha(TWOCAPTCHA_API_KEY)
 
             # Extract client object (can be passed explicitly or as first argument)
@@ -62,7 +65,8 @@ def handle_geetest(func):
             return None
 
         except Exception as ex:
-            print(f"[Geetest] General error in {func.__name__}: {ex}")
+            # Any other error must not break the main loop: the section just shows "no data"
+            print(f"[Error] {func.__name__}: {ex}")
             return None
 
     return wrapper
